@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { Switch, Route, Redirect } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css'
+import HomePage from './components/HomePage/HomePage.component'
+import SignUp from './components/sign-up/sign-up.component'
+import { connect } from 'react-redux'
+import PhysicsPage from './components/PhysicsPage/physics-page.component'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+
+    state = {currentUser: null}
+
+    render() {
+        return (
+            <div>
+                {/* <Switch> */}
+                    <Route exact path='/' render={() => this.props.currentUser ? (<Redirect to='/physics' />) : (<HomePage />)} />
+                    <Route exact path='/signup' component={SignUp} /> 
+                    {/* <Route path='/signin' component={SignIn} /> */}
+                    <Route exact path='/physics' component={PhysicsPage} /> 
+                {/* </Switch> */}
+            </div>
+        )
+    }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {currentUser: state.user.currentUser}
+}
+
+export default connect(mapStateToProps)(App)
